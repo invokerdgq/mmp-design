@@ -1,0 +1,17 @@
+/*定义scss全局变量*/
+:root {
+    --background-color:#14202D;
+    --title-textcolor:#ffffff;
+    --primary-color:#00F7C7;
+    --primary-textcolor:#ffffff;
+    --primary-font-size:14px;
+    --primary-font-size-bigger:16px;
+    --leftNav-width:18%;
+    --leftNav-bottom-color:rgba(73,78,95,1);
+    --content-textcolor:#1989FA;
+    --content-becareful-color:#F46C6C;
+    --applybackground-color:rgba(255,255,255,1);
+    --apply-iconcolor:#557CEC;
+    --apply-textcolor:rgba(48,49,51,1);
+    --tabs-color:#12B7AC
+}

@@ -1,0 +1,89 @@
+/*全局变量*/
+
+/*color*/
+$color-theme: #467CF3;
+$color-second: #F7B400;
+$color-main: #00CBBA;
+$color-danger: #FF5E67;
+
+/*button-color*/
+$--button-success-background-color: $color-main;
+$--button-success-border-color: $color-main;
+
+/*icon background*/
+$color-icon-bg0: $color-main;
+$color-icon-bg0-hover: #00DACA;
+$color-icon-bg1: #467CF3;
+$color-icon-bg1-hover: #276FFF;
+$color-icon-bg2: #F49E13;
+$color-icon-bg2-hover: #FBBD57;
+$color-icon-bg3: #FF5E67;
+$color-icon-bg3-hover: #FF8086;
+
+$color-input-bg: #F5F7FA;
+
+/*second-bg-color*/
+$gray-bg-main: #909399;
+$gray-bg-light: #E0E0E1;
+$gray-bg-light-second: #F6F7FA;
+
+/*scroll-bg*/
+$color-scroll-bg: #C8C9CC;
+
+
+/*font-color*/
+$color-font-main: #303133;
+$color-font-normal: #616266;
+$color-font-second: #909399;
+$color-font-last: #C0C4CC;
+
+/*nav-hover-color*/
+$color-nav-hover: $color-main;
+
+/*font-size*/
+$font-size-title: 18px;
+$font-size-small-title: 16px;
+$font-size-normal: 14px;
+$font-size-small: 12px;
+
+/*icon-font-size*/
+$icon-font-size-large: 70px;
+$icon-font-size-main: 25px;
+$icon-font-size-normal: 20px;
+$icon-font-size-small: 16px;
+
+/*font-weight*/
+$font-weight-big-title: 600;
+$font-weight-title: 500;
+$font-weight-normal: 400;
+
+/*border-color*/
+$color-border-main: #DBDFE6;
+$color-border-normal: #E3E7ED;
+$color-border-second: #EAEEF5;
+$color-border-last : #F2F6FC;
+
+/*border-radius*/
+$border-radius: 4px;
+
+/*line-color*/
+$color-line-main: #DBDFE6;
+$color-line-normal: #E3E7ED;
+$color-line-second: #EAEEF5;
+$color-line-last: #F2F6FC;
+
+
+/*length*/
+$padding-x: 15px;
+$padding-y: 15px;
+$padding-default: 15px;
+$padding-second: 10px;
+$padding-small: 8px;
+$margin-default: 15px;
+
+/*nav-side-color*/
+$color-nav-left: #10202F;
+$color-nav-left-bg: #203449;
+
+/*el-tabs*/
+$color-tabs-main: $color-main;
