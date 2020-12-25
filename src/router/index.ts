@@ -16,10 +16,10 @@ const routes: Array<RouteConfig> = [
     component: Home
   },
   {
-    path: '/create',
+    path: '/create:id',
     name: 'create',
     component: CreateApp,
-    redirect: '/create/process',
+    redirect: '/create:id/process',
     children: [
       {
         path: 'main',

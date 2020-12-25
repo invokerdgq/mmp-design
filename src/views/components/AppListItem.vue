@@ -37,8 +37,8 @@
    </div>
    <!--右上角 状态标志-->
    <LeanTab
-     :statusActive="status === '已发布'"
-     :statusText = "status"
+     :statusActive="status === 1"
+     :statusText = "status === 1? '已发布': '未发布'"
      :pos ="pos"
    ></LeanTab>
  </div>
@@ -61,7 +61,7 @@ import bgImg from '../../assets/images/defaultImg.png'
 export default class AppListItem extends Vue {
   @Prop() title!: string
   @Prop() imgUrl!: string
-  @Prop() status!: string
+  @Prop() status!: number
   @Prop() id!: string
   pos = 'right'
   bgImg = bgImg

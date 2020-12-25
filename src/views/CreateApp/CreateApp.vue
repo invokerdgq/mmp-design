@@ -1,6 +1,7 @@
 <template>
   <div class="create-app">
     <NavLeft
+      :title="title"
      :allow-design="false"
      :data="data"
      :current-node-key="currentNode"
@@ -29,8 +30,8 @@
         <el-dropdown class="content-right-title-feature" trigger="click">
           <span class="mmp-xia iconfont"></span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><span @click="closeOthers">关闭其它标签</span></el-dropdown-item>
-            <el-dropdown-item><span @click="closeAll">关闭全部标签</span></el-dropdown-item>
+            <el-dropdown-item @click.native="closeOthers"><span>关闭其它标签</span></el-dropdown-item>
+            <el-dropdown-item @click.native="closeAll"><span @click="closeAll">关闭全部标签</span></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -44,6 +45,7 @@
 <script lang="ts">
 import { Component, Watch, Vue } from 'vue-property-decorator'
 import NavLeft from '../../components/NavLeft.vue'
+import { getAppInfo } from '@/api/page/home'
 
 @Component({
   components: {
@@ -54,6 +56,7 @@ export default class CreateApp extends Vue {
   showTabs = false
   currentNode = ''
   tabsValue = ''
+  title = ''
   tabList: Array<any> = []
   data = [
     {
@@ -89,6 +92,9 @@ export default class CreateApp extends Vue {
   }
 
   created () {
+    getAppInfo(this.$route.params.id).then((res: any) => {
+      this.title = res.data.title
+    })
     if (localStorage.getItem('tabsList')) {
       this.tabList = JSON.parse(localStorage.getItem('tabsList') as string)
       this.tabsValue = this.$route.name as string

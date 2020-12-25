@@ -4,17 +4,41 @@
      <div class="nav-title">应用名称: {{title}}</div>
    </slot>
    <el-tree
-    :data="data"
-    node-key="id"
-    @node-click="nodeClick"
-    :current-node-key="currentNodeKey"
-    ref="tree"
+     :data="data"
+     node-key="id"
+     @node-click="nodeClick"
+     :current-node-key="currentNodeKey"
+     ref="tree"
+     v-if="data"
+     :expand-on-click-node="false"
    >
-       <span class="custom-tree-node" slot-scope="{node,data}">
+     <template slot-scope="{node, data}">
+       <span class="custom-tree-node">
          <span :class="data.icon" v-if="data.icon"></span>
          <span class="node-dec">{{data.label}}</span>
          <slot name="feature" :node="node" :data="data"></slot>
        </span>
+     </template>
+   </el-tree>
+   <el-tree
+    node-key="id"
+    :props="option"
+    :load="loadNode"
+    lazy
+    @node-click="nodeClick"
+    :current-node-key="currentNodeKey"
+    ref="tree"
+    v-else
+    :expand-on-click-node="false"
+    :default-expanded-keys="defaultKeys"
+   >
+     <template slot-scope="{node,data}">
+        <span :class="`custom-tree-node ${node.loading? 'is-loading': ''}`">
+         <span :class="data.type | getIcon" v-if="!node.loading"></span>
+         <span class="node-dec">{{data.title}}</span>
+         <slot name="feature" :node="node" :data="data"></slot>
+       </span>
+     </template>
    </el-tree>
  </div>
 </template>
@@ -24,19 +48,22 @@ import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
 
 @Component({})
 export default class NavLeft extends Vue {
-  title = '移动应用'
+  @Prop({ default: '移动应用' }) title!: string
+  @Prop() option: any
   @Prop({ default: false }) allowDesign!: boolean
   @Prop() data!: Array<any>
   @Prop({ default: '' }) currentNodeKey!: string
   @Prop({ default: 'dark' }) theme!: string
+  @Prop() loadNode!: any
+  @Prop() defaultKeys!: Array<string>
 
   @Watch('currentNodeKey')
   handleIdChange (val: string) {
     (this.$refs.tree as any).setCurrentKey(val === '' ? null : val)
   }
 
-  nodeClick (data: any) {
-    this.$emit('node', data)
+  nodeClick (data: any, node: any) {
+    this.$emit('node', data, node)
   }
 }
 </script>
@@ -78,10 +105,14 @@ export default class NavLeft extends Vue {
      color: $color-theme;
    }
   /deep/.el-tree-node {
+    .el-tree-node__expand-icon.is-leaf:hover{
+      color: transparent;
+      cursor: default;
+    }
     position: relative;
     color: $color-font-main;
     :hover{
-      color: $color-theme !important;
+      color: $color-theme ;
     }
     &:focus > .el-tree-node__content{
       background: white !important;
@@ -115,6 +146,9 @@ export default class NavLeft extends Vue {
       &:hover{
         background: white;
       }
+    }
+    .is-loading {
+      color: $color-theme;
     }
     .custom-tree-node{
       height: 30px;

@@ -1,13 +1,11 @@
-const config = require('./config.js')
-
 module.exports = {
   devServer: {
     host: '0.0.0.0',
     port: 4000,
     proxy: {
       '/api': {
-        target: config.BASE_URL,
-        pathRewrite:{
+        target: 'http://192.168.10.180:40001',
+        pathRewrite: {
           '^/api': ''
         },
         changeOrigin: true

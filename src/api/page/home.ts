@@ -8,6 +8,10 @@ export function createApp (params: object) {
   return api.post('/mmp/v1/app?', params)
 }
 
+export function getAppInfo (id: string) {
+  return api.get(`/mmp/v1/app/${id}`)
+}
+
 export function copyApp (params: object) {
   return api.post('/mmp/v1/app/copy?', params)
 }

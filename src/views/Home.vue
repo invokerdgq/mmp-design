@@ -173,7 +173,7 @@ export default class Home extends Vue {
 
   designApp (index: number) {
     this.$router.push({
-      name: 'create'
+      path: `/create${this.list[index].id}`
     })
   }
 

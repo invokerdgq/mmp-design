@@ -2,13 +2,13 @@ import axios from 'axios'
 import Vue from 'vue'
 
 const instance = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? '/api' : '/',
+  baseURL: process.env.NODE_ENV === 'development' ? '/api' : 'http://xxx.xxx.xxx',
   timeout: 3000
 })
 
-instance.interceptors.request.use((requsetConfig) => {
+instance.interceptors.request.use((requestConfig) => {
   // 请求拦截
-  return requsetConfig
+  return requestConfig
 })
 
 instance.interceptors.response.use((response) => {

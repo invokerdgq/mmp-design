@@ -25,4 +25,34 @@ function getRouteName (name: string) {
   return dec
 }
 
-export { GMTToStr, getRouteName }
+function getIcon (type: string): string {
+  switch (type) {
+    case 'root' :
+      return 'mmp-gongneng iconfont'
+    case 'module' :
+      return 'mmp-folder iconfont'
+    case 'page' :
+      return 'mmp-sidebar iconfont'
+    default :
+      return 'mmp-sidebar iconfont'
+  }
+}
+
+function getConfig (type: string): string {
+  switch (type) {
+    case 'base':
+      return '基础设置'
+    case 'connect':
+      return '业务关联'
+    case 'icon':
+      return '图标设置'
+    case 'ding':
+      return '浙政钉设置'
+    case 'ban':
+      return '浙里办设置'
+    default :
+      return ''
+  }
+}
+
+export { GMTToStr, getRouteName, getIcon, getConfig }
