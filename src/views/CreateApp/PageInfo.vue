@@ -193,7 +193,7 @@ export default class PageInfo extends Vue {
       callback(new Error('页面名称不能为空'))
     }
     this.allName.forEach((item: string) => {
-      if (item === value) callback(new Error('页面名称已存在'))
+      if (item === value && value !== this.info.title) callback(new Error('页面名称已存在'))
     })
     callback()
   }

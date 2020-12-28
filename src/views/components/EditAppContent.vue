@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { noRepeat } from '@/utils/validator'
 import { Form } from 'element-ui'
 import { editApp } from '@/api/page/home'
@@ -87,7 +87,7 @@ export default class EditAppContent extends Vue {
         this.formData.id = this.appInfo.id
         this.formData.coverimage = this.appInfo.coverimage
         // @ts-ignore
-        const res = await editApp(this.getParams(this.formData, '中'))
+        await editApp(this.getParams(this.formData, '中'))
         this.$message({
           message: '编辑成功',
           type: 'success',

@@ -135,7 +135,7 @@ export default class ModuleInfo extends Vue {
       callback(new Error('模块名称不能为空'))
     }
     this.allName.forEach((item: any) => {
-      if (item.title === value) {
+      if (item.title === value && value !== this.info.title) {
         callback(new Error('模块名称已存在'))
       }
     })
