@@ -117,13 +117,13 @@ export default class ConfigDesign extends Vue {
       id: '1',
       label: '基础设置',
       type: 'base',
-      icon: 'mmp-sidebar iconfont'
+      icon: 'mmp-set iconfont'
     },
     {
       id: '2',
       label: '业务关联',
       type: 'connect',
-      icon: 'mmp-sidebar iconfont'
+      icon: 'mmp-ywgl iconfont'
     },
     {
       id: '3',
@@ -135,13 +135,13 @@ export default class ConfigDesign extends Vue {
       id: '4',
       label: '浙政钉设置',
       type: 'ding',
-      icon: 'mmp-sidebar iconfont'
+      icon: 'mmp-zzdsz iconfont'
     },
     {
       id: '5',
       label: '浙里办设置',
       type: 'ban',
-      icon: 'mmp-sidebar iconfont'
+      icon: 'mmp-zlbsz iconfont'
     }
   ]
 

@@ -119,7 +119,7 @@ export default class Home extends Vue {
   }
 
   copy () {
-    this.$copyText(this.list[this.currentAppIndex].previewUrl).then(res => {
+    this.$copyText(this.list[this.currentAppIndex].previewUrl).then(() => {
       this.$message({
         type: 'success',
         message: '复制成功',
@@ -181,6 +181,7 @@ export default class Home extends Vue {
 
   previewApp (item: any) {
     this.showPreview = true
+    console.log(item)
   }
 
   publishApp () {
@@ -219,7 +220,7 @@ export default class Home extends Vue {
  .home{
    @include no-flex-warp;
    position: relative;
-   padding: $padding-y  0 $padding-y $padding-x;
+   padding: $padding-default  0 $padding-default $padding-default;
    .list-item-container{
      width: 223px;
      height: 369px;
@@ -276,7 +277,6 @@ export default class Home extends Vue {
            border-bottom: solid 1px $color-border-main;
            .preview-title {
              font-size: $font-size-title;
-             font-family: PingFangSC-Medium, PingFang SC;
              font-weight: $font-weight-title;
              color: $color-font-main;
              line-height: 25px;
@@ -289,17 +289,17 @@ export default class Home extends Vue {
            border-bottom: solid 1px $color-border-main;
            padding: $padding-default;
            .page-status{
-             margin-bottom: $padding-y;
+             margin-bottom: $padding-default;
              display: flex;
              & [class^=mmp] {
                margin-right: 4px;
                font-size: $font-size-small-title;
              }
              .mmp-alert {
-               color: $color-second;
+               color: $color-second-orange;
              }
              .mmp-success {
-               color: $--button-success-background-color;
+               color: $color-theme-cyan;
              }
              &-dec{
                margin-right: 10px;
@@ -323,7 +323,7 @@ export default class Home extends Vue {
                padding: 9px 6px 14px 8px;
                font-size: $font-size-small;
                color: #909399;
-               margin-left: $padding-x;
+               margin-left: $padding-default;
              }
            }
          }

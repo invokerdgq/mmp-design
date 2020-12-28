@@ -97,7 +97,7 @@ export default class CreateAppContent extends Vue {
    width: 120px;
    height: 120px;
    border-radius: 4px;
-   background: $color-theme;
+   background: $color-theme-blue;
    color: white;
    @include flex-clo;
    [class^=mmp] {

@@ -39,7 +39,7 @@
        <el-radio label="vue 工程源码" border :disabled="exsitedList.indexOf('vue 工程源码') !== -1">vue 工程源码</el-radio>
      </el-radio-group>
    </el-form-item>
-   <el-form-item label="发布类型" v-else prop="contentType" class="pub-radio-group">
+   <el-form-item label="发布类型" v-else prop="contentType" class="multiline-radio-group">
      <el-radio-group v-model="formData.contentType">
        <el-radio label="H5" border :disabled="formData.contentType !=='H5'">H5</el-radio>
        <el-radio label="浙政钉" border :disabled="formData.contentType !=='浙政钉'">H5(浙政钉)</el-radio>
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { noRepeat, versionCheck } from '@/utils/validator'
 import { Form } from 'element-ui'
 import { publishApp } from '@/api/page/home'
@@ -175,22 +175,5 @@ export default class PublishAppContent extends Vue {
 </script>
 
 <style scoped lang="scss">
-.pub-radio-group{
-  .el-radio-group{
-    margin-top: -10px;
-    margin-right: -22px;
-    .el-radio{
-      margin-right: 22px;
-      margin-left: 0;
-      margin-top: 10px;
-    }
-    .el-radio.is-bordered{
-      padding: 12px 10px 0 10px
-    }
-    .el-radio.is-bordered + .el-radio.is-bordered{
-      margin-left: 0;
-    }
-  }
-}
 
 </style>

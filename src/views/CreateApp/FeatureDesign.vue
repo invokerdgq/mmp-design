@@ -25,7 +25,7 @@
            <li class="li-item"><span class="mmp-add-circle iconfont"/><el-button type="text" :disabled="nodeType === 'page'" @click="addPage(node)">添加页面</el-button></li>
            <li class="li-item"><span class="mmp-jian iconfont"/><el-button type="text" :disabled="nodeType !== 'page'"  @click="deletePage(node)">删除页面</el-button></li>
          </ul>
-         <span slot="reference" class="mmp-more iconfont" v-show="data.id === currentNode"></span>
+         <span slot="reference" class="mmp-more iconfont" :style="{visibility:data.id === currentNode? 'visible': 'hidden'}"></span>
        </el-popover>
      </span>
    </NavLeft>
@@ -268,30 +268,31 @@ export default class FeatureDesign extends Vue {
 
 .more-feature{
   position: absolute;
-  right: 5px ;
+  right: 0;
   top: 0;
+  height: 100%;
   line-height: 30px;
   [class^=mmp] {
       font-size: 16px;
-      color: $color-theme;
-      padding: 0 5px 0 0;
+      color: $color-theme-blue;
+
   }
 }
 .ul-feature-page,.ul-feature-module{
   & li:first-child {
     text-align: center;
     border-bottom: solid 1px $color-border-main;
-    margin-left:-$padding-default--small;
-    margin-right:-$padding-default--small;
+    margin-left:-$padding-default-small;
+    margin-right:-$padding-default-small;
   }
   li{
     [class^=mmp] {
-      color: $color-theme;
+      color: $color-theme-blue;
       margin-right: 5px;
     }
     &:hover{
       cursor: pointer;
-      color: $color-theme;
+      color: $color-theme-blue;
     }
     .icon-disable {
       color: $color-font-last;
@@ -319,7 +320,7 @@ export default class FeatureDesign extends Vue {
   & li:last-child {
     color: $color-font-main;
     [class^=mmp] {
-      color: $color-theme;
+      color: $color-theme-blue;
     }
   }
 }

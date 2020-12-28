@@ -16,27 +16,27 @@ export default class IconContainer extends Vue {
 
 <style scoped lang="scss">
  .bg0{
-   background: $color-icon-bg0;
+   background: $color-iconBg-cyan;
    &:hover{
-     background: $color-icon-bg0-hover;
+     background: $color-iconBg-hover-cyan;
    }
  }
  .bg1{
-   background: $color-icon-bg1;
+   background: $color-iconBg-blue;
    &:hover{
-     background: $color-icon-bg1-hover;
+     background: $color-iconBg-hover-blue;
    }
  }
  .bg2{
-   background: $color-icon-bg2;
+   background: $color-iconBg-orange;
    &:hover{
-     background: $color-icon-bg2-hover;
+     background: $color-iconBg-hover-orange;
    }
  }
  .bg3{
-   background: $color-icon-bg3;
+   background: $color-iconBg-red;
    &:hover{
-     background: $color-icon-bg3-hover;
+     background: $color-iconBg-hover-red;
    }
  }
  .icon-container{

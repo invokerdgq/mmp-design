@@ -28,9 +28,11 @@ function getRouteName (name: string) {
 function getIcon (type: string): string {
   switch (type) {
     case 'root' :
-      return 'mmp-gongneng iconfont'
+      return 'mmp-addContents iconfont'
     case 'module' :
-      return 'mmp-folder iconfont'
+      return 'mmp-fileClose iconfont'
+    case 'module-open' :
+      return 'mmp-fileOpen iconfont'
     case 'page' :
       return 'mmp-sidebar iconfont'
     default :

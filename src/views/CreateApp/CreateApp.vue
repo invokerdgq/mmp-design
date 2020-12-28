@@ -70,14 +70,14 @@ export default class CreateApp extends Vue {
       id: '2',
       label: '功能定制',
       name: 'feature',
-      icon: 'mmp-gongneng iconfont',
+      icon: 'mmp-gnmk iconfont',
       children: []
     },
     {
       id: '3',
       label: '应用配置',
       name: 'config',
-      icon: 'mmp-gongneng iconfont',
+      icon: 'mmp-yypz iconfont',
       children: []
     }
   ]

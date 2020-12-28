@@ -406,7 +406,7 @@ export default class MainDesign extends Vue {
    padding: $padding-default 0;
  }
  .mmp-trash{
-   color: $color-danger;
+   color: $color-second-red;
  }
  .table-design-border {
    flex: 1 0 300px;

@@ -7,8 +7,8 @@
      </el-radio-group>
    </el-header>
    <el-main>
-     <el-form :model="formData" v-if="edit" :rules="rules" ref="editForm" key="1">
-       <el-form-item label="名称" label-width="80px" prop="edit.title">
+     <el-form :model="formData.edit" v-if="edit" :rules="rules" ref="editForm" key="1">
+       <el-form-item label="名称" label-width="80px" prop="title">
          <el-input
            v-model="formData.edit.title"
            maxlength="25"
@@ -42,7 +42,7 @@
            <el-radio :label="0" disabled>移动定制</el-radio>
          </el-radio-group>
        </el-form-item>
-       <el-form-item label-width="80px" label="页面地址" prop="edit.url">
+       <el-form-item label-width="80px" label="页面地址" prop="url">
          <el-input
            maxlength="500"
            show-word-limit
@@ -64,10 +64,10 @@
          <div class="save-container"><el-button type="primary" @click="editPage" :disabled="isLoading">保存</el-button></div>
        </el-form-item>
      </el-form>
-     <el-form :model="formData" v-if="!edit" :rules="rules" ref="addForm" key="2">
+     <el-form :model="formData.create" v-if="!edit" :rules="rules" ref="addForm" key="2">
        <el-row :gutter="20">
          <el-col :span="12">
-           <el-form-item label="名称" label-width="80px" prop="create.title">
+           <el-form-item label="名称" label-width="80px" prop="title">
              <el-input
                v-model="formData.create.title"
                maxlength="25"
@@ -92,7 +92,7 @@
            <el-radio :label="0" disabled>移动定制</el-radio>
          </el-radio-group>
        </el-form-item>
-       <el-form-item label-width="80px" label="页面地址" prop="create.url">
+       <el-form-item label-width="80px" label="页面地址" prop="url">
          <el-input
            maxlength="500"
            show-word-limit
@@ -147,23 +147,17 @@ export default class PageInfo extends Vue {
   }
 
   rules = {
-    'edit.title': [
+    title: [
       { validator: this.check, trigger: 'blur', required: true }
     ],
-    'edit.url': [
-      { required: true, trigger: 'blur', message: '页面地址不能为空' }
-    ],
-    'create.title': [
-      { validator: this.check, trigger: 'blur', required: true }
-    ],
-    'create.url': [
+    url: [
       { required: true, trigger: 'blur', message: '页面地址不能为空' }
     ]
   }
 
   @Prop() edit!: boolean
   @Prop() info!: any
-  @Prop() allName!: any
+  @Prop() allName!: Array<any>
 
   @Watch('info.id')
   handleNodeChange () {

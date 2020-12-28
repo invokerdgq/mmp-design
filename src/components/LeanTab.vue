@@ -37,10 +37,10 @@ export default class LeanTab extends Vue {
      transform-origin: 64px 17px;
    }
    .active{
-     background-color: $color-theme;
+     background-color: $color-theme-blue;
    }
    .unactive{
-     background-color: $color-second;
+     background-color: $color-second-orange;
    }
  }
  .lean-left{
