@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title = '快速构建应用'
+    title = '构建新应用'
     :visible.sync = 'show'
     width="40%"
     v-if="show"

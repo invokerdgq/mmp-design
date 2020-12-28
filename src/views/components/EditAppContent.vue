@@ -78,6 +78,7 @@ export default class EditAppContent extends Vue {
 
   created () {
     this.formData.title = this.appInfo.title
+    this.formData.description = this.appInfo.desc
   }
 
   editConfirm () {

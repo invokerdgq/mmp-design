@@ -172,9 +172,7 @@ export default class Home extends Vue {
   }
 
   designApp (index: number) {
-    this.$router.push({
-      path: `/create${this.list[index].id}`
-    })
+    window.open(`/create${this.list[index].id}`)
   }
 
   copyApp () {
@@ -234,6 +232,9 @@ export default class Home extends Vue {
     & > [class^=mmp]{
        font-size: $icon-font-size-large;
        color: #E0E0E1;
+      &:hover{
+        cursor: pointer;
+      }
        @include all-center;
      }
    }

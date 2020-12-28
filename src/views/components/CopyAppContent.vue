@@ -77,6 +77,7 @@ export default class CopyAppContent extends Vue {
 
   created () {
     this.formData.title = this.appInfo.title
+    this.formData.description = this.appInfo.description
     this.formData.createDate = Date.now()
   }
 

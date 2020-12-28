@@ -38,11 +38,11 @@
        <el-form-item label-width="80px" label="类型选择" required>
          <el-radio-group v-model="formData.edit.type">
            <el-radio :label="1">BI定制</el-radio>
-           <el-radio :label="2" disabled>表单定制</el-radio>
+           <el-radio :label="2">表单定制</el-radio>
            <el-radio :label="0" disabled>移动定制</el-radio>
          </el-radio-group>
        </el-form-item>
-       <el-form-item label-width="80px" label="页面地址">
+       <el-form-item label-width="80px" label="页面地址" prop="edit.url">
          <el-input
            maxlength="500"
            show-word-limit
@@ -61,7 +61,7 @@
          />
        </el-form-item>
        <el-form-item>
-         <div class="save-container"><el-button type="primary" @click="editPage">保存</el-button></div>
+         <div class="save-container"><el-button type="primary" @click="editPage" :disabled="isLoading">保存</el-button></div>
        </el-form-item>
      </el-form>
      <el-form :model="formData" v-if="!edit" :rules="rules" ref="addForm" key="2">
@@ -88,11 +88,11 @@
        <el-form-item label-width="80px" label="类型选择" required>
          <el-radio-group v-model="formData.create.type">
            <el-radio :label="1">BI定制</el-radio>
-           <el-radio :label="2" disabled>表单定制</el-radio>
+           <el-radio :label="2">表单定制</el-radio>
            <el-radio :label="0" disabled>移动定制</el-radio>
          </el-radio-group>
        </el-form-item>
-       <el-form-item label-width="80px" label="页面地址">
+       <el-form-item label-width="80px" label="页面地址" prop="create.url">
          <el-input
            maxlength="500"
            show-word-limit
@@ -111,7 +111,7 @@
          />
        </el-form-item>
        <el-form-item>
-         <div class="save-container"><el-button type="primary" @click="addPage">保存</el-button></div>
+         <div class="save-container"><el-button type="primary" @click="addPage" :disabled="isLoading">保存</el-button></div>
        </el-form-item>
      </el-form>
    </el-main>
@@ -125,11 +125,13 @@ import * as api from '@/api/page/featureDesign'
 @Component({})
 export default class PageInfo extends Vue {
   type = 'pageInfo'
+  isLoading = false
   formData = {
     edit: {
       title: '',
       route: '',
       type: 1,
+      id: '',
       url: '',
       description: '',
       parentModuleId: ''
@@ -148,8 +150,14 @@ export default class PageInfo extends Vue {
     'edit.title': [
       { validator: this.check, trigger: 'blur', required: true }
     ],
+    'edit.url': [
+      { required: true, trigger: 'blur', message: '页面地址不能为空' }
+    ],
     'create.title': [
       { validator: this.check, trigger: 'blur', required: true }
+    ],
+    'create.url': [
+      { required: true, trigger: 'blur', message: '页面地址不能为空' }
     ]
   }
 
@@ -163,6 +171,7 @@ export default class PageInfo extends Vue {
   }
 
   resetPage () {
+    this.formData.edit.id = this.info.id
     this.formData.edit.title = this.info.title
     this.formData.edit.description = this.info.description
     this.formData.edit.route = this.info.route
@@ -193,15 +202,15 @@ export default class PageInfo extends Vue {
     (this.$refs.addForm as any).validate(async (valid: boolean) => {
       if (valid) {
         const params = new FormData()
-        console.log(JSON.stringify(this.formData.create), this.formData.create.parentModuleId, 'oooooooooooooo')
         params.set('pageJson', JSON.stringify(this.formData.create))
         params.set('optsBy', '中')
+        this.isLoading = true
         await api.addPage(params)
         this.$message({
           type: 'success',
           message: '添加页面成功'
         })
-        this.$emit('updateName')
+        this.isLoading = false
         this.$emit('addPage')
       }
     })
@@ -213,12 +222,14 @@ export default class PageInfo extends Vue {
         const params = new FormData()
         params.set('pageJson', JSON.stringify(this.formData.edit))
         params.set('optsBy', '中')
-        await api.addPage(params)
+        this.isLoading = true
+        await api.editPage(params)
         this.$message({
           type: 'success',
           message: '修改页面成功'
         })
-        this.$emit('updateName')
+        this.isLoading = false
+        this.$emit('edit', 'page')
       }
     })
   }

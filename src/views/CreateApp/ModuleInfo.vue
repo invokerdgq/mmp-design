@@ -9,9 +9,9 @@
    </el-header>
    <el-main>
      <div v-if="type === 'moduleInfo'" class="module-info-content">
-       <el-form :model="formData" ref="form" v-if="edit" key="1">
-         <el-form-item label="模块名称" label-width="80px" required >
-           <el-input v-model="formData.edit.title" disabled></el-input>
+       <el-form :model="formData" ref="form" v-if="edit" key="1" :rules="rules">
+         <el-form-item label="模块名称" label-width="80px" required prop="edit.title">
+           <el-input v-model="formData.edit.title" :disabled="info.parentModuleId === '0'"></el-input>
          </el-form-item>
          <el-row :gutter="20" v-if="parentName">
            <el-col :span="12">
@@ -40,7 +40,7 @@
            ></el-input>
          </el-form-item>
          <el-form-item>
-           <div class="save-container"><el-button type="primary" @click="editModule">保存</el-button></div>
+           <div class="save-container"><el-button type="primary" @click="editModule" :disabled="isLoading">保存</el-button></div>
          </el-form-item>
        </el-form>
        <el-form :model="formData" ref="addForm" :rules="rules" v-else key="2">
@@ -74,7 +74,7 @@
            ></el-input>
          </el-form-item>
          <el-form-item>
-           <div class="save-container"><el-button type="primary" @click="addModule">保存</el-button></div>
+           <div class="save-container"><el-button type="primary" @click="addModule" :disabled="isLoading">保存</el-button></div>
          </el-form-item>
        </el-form>
      </div>
@@ -96,6 +96,7 @@ import * as api from '@/api/page/featureDesign'
 export default class ModuleInfo extends Vue {
   type = 'moduleInfo'
   reCreate = true
+  isLoading = false
   formData = {
     edit: {
       title: '',
@@ -117,6 +118,9 @@ export default class ModuleInfo extends Vue {
 
   rules = {
     'create.title': [
+      { validator: this.check, trigger: 'blur', required: true }
+    ],
+    'edit.title': [
       { validator: this.check, trigger: 'blur', required: true }
     ]
   }
@@ -158,27 +162,34 @@ export default class ModuleInfo extends Vue {
         const params = new FormData()
         params.set('moduleJson', JSON.stringify(this.formData.create))
         params.set('optsBy', '中')
+        this.isLoading = true
         await api.addModule(params)
         this.$message({
           type: 'success',
           message: '添加模块成功'
         })
-        this.$emit('updateName')
+        this.isLoading = false
         this.$emit('addModule')
       }
     })
   }
 
-  async editModule () {
-    const params = new FormData()
-    params.set('moduleJson', JSON.stringify(this.formData.edit))
-    params.set('optsBy', '中')
-    await api.editModule(params)
-    this.$message({
-      type: 'success',
-      message: '修改模块成功'
+  editModule () {
+    (this.$refs.form as any).validate(async (valid: boolean) => {
+      if (valid) {
+        const params = new FormData()
+        params.set('moduleJson', JSON.stringify(this.formData.edit))
+        params.set('optsBy', '中')
+        this.isLoading = true
+        await api.editModule(params)
+        this.$message({
+          type: 'success',
+          message: '修改模块成功'
+        })
+        this.isLoading = false
+        this.$emit('edit', 'module', this.formData.edit.title, this.formData.edit.description)
+      }
     })
-    this.$emit('updateName')
   }
 }
 </script>

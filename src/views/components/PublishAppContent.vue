@@ -22,7 +22,7 @@
      ></el-input>
    </el-form-item>
    <el-form-item label="版本号"  v-if="formData.pubType !== 'new'" prop="versionSelect">
-     <el-select placeholder="请选择" v-model="formData.versionSelect"  @blur="handleSelect" @change="selectChange">
+     <el-select placeholder="请选择" v-model="formData.versionSelect"  @blur="handleSelect()" @change="selectChange">
        <el-option
          v-for="item in formData.releaseList"
          :key="item.version +' '+ item.distributeType"
@@ -75,11 +75,12 @@ export default class PublishAppContent extends Vue {
   @Prop({ default: 'right' }) labelPosition!: string
   @Prop() appInfo!: any
   @Prop() showDialog!: boolean
+  selectVersionIndex: any = ''
   formData = {
     pubType: 'new', // update new
     version: '',
     versionSelect: '',
-    contentType: '',
+    contentType: 'H5',
     description: '',
     releaseList: []
   }
@@ -143,7 +144,7 @@ export default class PublishAppContent extends Vue {
   }
 
   selectChange (val: any) {
-    console.log(val)
+    // this.formData.description = this.formData.releaseList[this.selectVersionIndex].desc
     const arr = val.split(' ')
     if (arr.length === 2) {
       this.formData.contentType = arr[1]

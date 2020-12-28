@@ -101,6 +101,10 @@
   //overflow: auto;
 }
 
+.el-table .cell{
+  white-space: nowrap;
+}
+
 .el-table .el-table-header-tr th {
   background: #F5F7FA;
   color: $color-font-main;
@@ -199,6 +203,7 @@ td, th, caption {
 /*popover*/
 .el-popover{
   min-width: 90px;
+  padding: $padding-default--small;
 }
 
 /*el-container*/

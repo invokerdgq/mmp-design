@@ -28,16 +28,21 @@
    <el-table
      ref="multipleTable"
      :data="pageList"
-     tooltip-effect="light"
+     tooltip-effect="dark"
      style="width: 100%"
      @selection-change="handleSelectionChange"
      header-row-class-name="el-table-header-tr"
      class="table-design-border flex-table"
+     :cell-style="setCellStyle"
    >
      <el-table-column type="selection"></el-table-column>
-     <el-table-column label="序号" type="index" width="100"></el-table-column>
-     <el-table-column label="名称" prop="title" sortable></el-table-column>
-     <el-table-column label="说明" prop="description" sortable>
+     <el-table-column label="序号" width="100">
+       <template slot-scope="{ row, $index }">
+         {{ (pageNum-1)*pageSize + $index + 1}}
+       </template>
+     </el-table-column>
+     <el-table-column label="名称" prop="title" sortable :show-overflow-tooltip="true"></el-table-column>
+     <el-table-column label="说明" prop="description" sortable :show-overflow-tooltip="true">
 
      </el-table-column>
      <el-table-column label="启动" >
@@ -106,7 +111,7 @@
      </el-form>
      <div slot="footer">
        <el-button @click="type = ''; $message( '已取消新增')">取消</el-button>
-       <el-button type="primary" @click="addConfirm">确认</el-button>
+       <el-button type="primary" @click="addConfirm">确定</el-button>
      </div>
    </el-dialog>
    <!--新增dialog 结束-->
@@ -145,7 +150,7 @@
      </el-form>
      <div slot="footer">
        <el-button @click="type = ''; $message( '已取消修改')">取消</el-button>
-       <el-button type="primary" @click="editConfirm">确认</el-button>
+       <el-button type="primary" @click="editConfirm">确定</el-button>
      </div>
    </el-dialog>
    <!--修改dialog 结束-->
@@ -153,7 +158,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import * as api from '@/api/page/mainDesign'
 
 @Component({})
@@ -190,6 +195,14 @@ export default class MainDesign extends Vue {
     title: [
       { validator: this.check, trigger: 'blur', required: true }
     ]
+  }
+
+  setCellStyle (row: any, column: any, rowIndex: number, columnIndex: number) {
+    if (columnIndex === 1) {
+      return {
+        textAlign: 'center'
+      }
+    }
   }
 
   check (rule: any, value: string, callback: (arg0?: any) => void) {
@@ -283,13 +296,12 @@ export default class MainDesign extends Vue {
 
   deletePage () {
     if (this.selectionList && this.selectionList.length > 0) {
-      this.$confirm('删除选择的首页, 是否继续?', '提示', {
+      this.$confirm('删除选择的首页, 是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
         const list: any = []
-        console.log(this.selectionList, 'ppppppp')
         this.selectionList.forEach((item: any) => {
           list.push(api.deleteHomePage(item.id))
         })
@@ -307,15 +319,15 @@ export default class MainDesign extends Vue {
         })
       })
     } else {
-      this.$alert('请选择要删除的首页', '提示', {
-        confirmButtonText: '确定',
-        type: 'warning'
-      }).then(() => {})
+      this.$message({
+        type: 'warning',
+        message: '请选择要删除的首页'
+      })
     }
   }
 
   deletePageItem (item: any) {
-    this.$confirm('删除选择的首页, 是否继续?', '提示', {
+    this.$confirm('删除选择的首页, 是否继续？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
@@ -340,6 +352,7 @@ export default class MainDesign extends Vue {
     this.formData.editPageData.title = item.title
     this.formData.editPageData.type = item.type
     this.formData.editPageData.id = item.id
+    this.formData.editPageData.description = item.description
   }
 
   designPageItem (item: any) {}
@@ -397,5 +410,21 @@ export default class MainDesign extends Vue {
  }
  .table-design-border {
    flex: 1 0 300px;
+ }
+ /deep/ .el-table .el-table-header-tr{
+   & th:nth-child(2) {
+     text-align: center;
+   }
+   & th:nth-child(6) {
+     text-align: center;
+   }
+ }
+ /deep/ .el-table__row {
+   & td:nth-child(2) .cell {
+     text-align: center;
+   }
+   & td:nth-child(6) .cell{
+     text-align: center;
+   }
  }
 </style>

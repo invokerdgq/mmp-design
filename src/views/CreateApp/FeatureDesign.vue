@@ -36,7 +36,7 @@
       :info="node.data || {}"
       :allName="moduleName"
       :parentName="parentNodeTitle"
-      @updateName="getNameInfo"
+      @edit="handleEdit"
       @addModule="appendNode"
      ></ModuleInfo>
      <PageInfo
@@ -44,7 +44,7 @@
       :edit="edit"
       :info="node.data || {}"
       :allName="pageName"
-      @updataName="getNameInfo"
+      @edit="handleEdit"
       @addPage="appendNode"
      ></PageInfo>
    </div>
@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Watch, Vue } from 'vue-property-decorator'
 import NavLeft from '../../components/NavLeft.vue'
 import ModuleInfo from '@/views/CreateApp/ModuleInfo.vue'
 import PageInfo from '@/views/CreateApp/PageInfo.vue'
@@ -81,6 +81,7 @@ export default class FeatureDesign extends Vue {
     isLeaf: 'leaf'
   }
 
+  // 为每一个节点 加上leaf 与 type 属性
   formate (data: Array<any>, type: string) {
     if (data.length <= 0) return []
     return data.reduce((pre: any, item: any) => {
@@ -91,6 +92,22 @@ export default class FeatureDesign extends Vue {
     }, [])
   }
 
+  @Watch('edit')
+  handleEditChange (val: boolean) {
+    this.searchName(val)
+  }
+
+  searchName (edit: boolean) {
+    if (edit) {
+      this.searchTreeNode(this.nameInfo, (this.node.data || {}).parentModuleId, 'childModules', 'moduleName')
+      this.searchTreeNode(this.nameInfo, (this.node.data || {}).parentModuleId, 'childPageName', 'pageName')
+      return
+    }
+    this.searchTreeNode(this.nameInfo, this.node.data.id, 'childModules', 'moduleName')
+    this.searchTreeNode(this.nameInfo, this.node.data.id, 'childPageName', 'pageName')
+  }
+
+  // 递归查找 对应节点的子节点 模块名称或页面名称
   searchTreeNode (data: any, id: string, type: string, key: string) {
     if (data.moduleId === id) {
       // @ts-ignore
@@ -103,13 +120,9 @@ export default class FeatureDesign extends Vue {
     })
   }
 
-  async resolveResponse (id: string, type: string) {
-    let res
-    if (type === 'page') {
-      res = await api.getPageInfo(id)
-    } else {
-      res = await api.getModuleInfo(id)
-    }
+  // 不同类型的节点展开时 获取子节点数据
+  async resolveResponse (id: string) {
+    const res = await api.getModuleInfo(id)
     return [
       ...this.formate(res.data.moduleList, 'module'),
       ...this.formate(res.data.pageList, 'page')
@@ -135,7 +148,7 @@ export default class FeatureDesign extends Vue {
       node.childNodes[0].loadData()
       return
     }
-    const data = await this.resolveResponse(node.data.id, node.data.type)
+    const data = await this.resolveResponse(node.data.id)
     this.node = node
     resolve(data)
   }
@@ -144,9 +157,11 @@ export default class FeatureDesign extends Vue {
     this.getNameInfo()
   }
 
+  // 获取应用的所有模块和页面名称
   async getNameInfo () {
     const res = await api.getAllName(this.$route.params.id)
     this.nameInfo = res.data
+    this.searchName(this.edit)
   }
 
   mounted () {
@@ -160,7 +175,7 @@ export default class FeatureDesign extends Vue {
   }
 
   deleteModule (node: any) {
-    this.$confirm('此模块下所有子模块和页面都将被删除，确定要删除吗?', '提示', {
+    this.$confirm('此模块下所有子模块和页面都将被删除，确定要删除吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
@@ -184,7 +199,21 @@ export default class FeatureDesign extends Vue {
     this.edit = false
   }
 
+  // 编辑页面或模块完成 更新节点信息
+  async handleEdit (type: string, title = '', desc = '') {
+    await this.getNameInfo()
+    if (type === 'page') {
+      const res = await api.getPageInfo(this.node.data.id)
+      this.node.data = res.data
+      return
+    }
+    this.node.data.title = title
+    this.node.data.description = desc
+  }
+
+  // 添加页面和模块成功时 更新节点子节点信息 更新模块和页面名称
   appendNode () {
+    this.getNameInfo()
     if (this.node.expanded) {
       this.node.isLeaf = false
       this.node.loaded = false // 必须得修改loaded 参数 不然loadData() 不会生效
@@ -196,7 +225,7 @@ export default class FeatureDesign extends Vue {
   }
 
   deletePage (node: any) {
-    this.$confirm('删除页面将会级联删除其基本权限，确定要删除吗?', '提示', {
+    this.$confirm('删除页面将会级联删除其基本权限，确定要删除吗？', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning'
@@ -216,15 +245,13 @@ export default class FeatureDesign extends Vue {
   }
 
   nodeChange (data: any, node: any) {
-    console.log(node)
     this.currentNode = data.id
     this.nodeType = data.type
     this.chooseType = data.type
     this.edit = true
     this.node = node
     this.parentNodeTitle = (node.parent.data || {}).title
-    this.searchTreeNode(this.nameInfo, this.node.data.id, 'childModules', 'moduleName')
-    this.searchTreeNode(this.nameInfo, this.node.data.id, 'childPageName', 'pageName')
+    this.searchName(this.edit)
   }
 }
 </script>
@@ -253,6 +280,9 @@ export default class FeatureDesign extends Vue {
 .ul-feature-page,.ul-feature-module{
   & li:first-child {
     text-align: center;
+    border-bottom: solid 1px $color-border-main;
+    margin-left:-$padding-default--small;
+    margin-right:-$padding-default--small;
   }
   li{
     [class^=mmp] {

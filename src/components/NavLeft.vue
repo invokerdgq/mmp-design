@@ -33,11 +33,11 @@
     :default-expanded-keys="defaultKeys"
    >
      <template slot-scope="{node,data}">
-        <span :class="`custom-tree-node ${node.loading? 'is-loading': ''}`">
+        <div :class="`custom-tree-node ${node.loading? 'is-loading': ''}`">
          <span :class="data.type | getIcon" v-if="!node.loading"></span>
          <span class="node-dec">{{data.title}}</span>
          <slot name="feature" :node="node" :data="data"></slot>
-       </span>
+       </div>
      </template>
    </el-tree>
  </div>
@@ -151,22 +151,21 @@ export default class NavLeft extends Vue {
       color: $color-theme;
     }
     .custom-tree-node{
+      flex: 0.85;
       height: 30px;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       [class^=mmp]{
         font-size: 16px;
         margin-right: 8px;
         vertical-align: middle;
       }
       .node-dec{
-        vertical-align: middle;
-      }
-      &::after{
-        content: '';
         display: inline-block;
-        width: 0;
-        height: 100%;
-        vertical-align: middle;
+        width: 115px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
   }
