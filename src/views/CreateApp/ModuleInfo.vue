@@ -10,7 +10,7 @@
    <el-main>
      <div v-if="type === 'moduleInfo'" class="module-info-content">
        <el-form :model="formData" ref="form" v-if="edit" key="1" :rules="rules">
-         <el-form-item label="模块名称" label-width="80px" required prop="edit.title">
+         <el-form-item label="模块名称" label-width="80px" prop="edit.title">
            <el-input v-model="formData.edit.title" :disabled="info.parentModuleId === '0'"></el-input>
          </el-form-item>
          <el-row :gutter="20" v-if="parentName">
