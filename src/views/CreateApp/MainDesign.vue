@@ -261,7 +261,7 @@ export default class MainDesign extends Vue {
   editConfirm () {
     (this.$refs.edit as any).validate(async (valid: any) => {
       if (valid) {
-        await api.editHomePage(this.getParams(this.formData.editPageData, { createBy: '中' }))
+        await api.editHomePage(this.getParams(this.formData.editPageData, { updateBy: '中' }))
         this.$message({
           type: 'success',
           message: '修改页面成功'

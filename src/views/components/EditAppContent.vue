@@ -86,7 +86,7 @@ export default class EditAppContent extends Vue {
       if (valid) {
         this.formData.id = this.appInfo.id
         this.formData.coverimage = this.appInfo.coverimage
-        await editApp(this.getParams(this.formData, { createBy: '中' }))
+        await editApp(this.getParams(this.formData, { updateBy: '中' }))
         this.$message({
           message: '编辑成功',
           type: 'success',

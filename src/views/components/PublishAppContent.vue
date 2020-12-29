@@ -12,17 +12,17 @@
        <el-radio label="update">覆盖旧版本</el-radio>
      </el-radio-group>
    </el-form-item>
-   <el-form-item label="版本号"  prop="version"  v-if="formData.pubType === 'new'">
+   <el-form-item label="版本号"  prop="add.version"  v-if="formData.pubType === 'new'">
      <el-input
-      v-model="formData.version"
+      v-model="formData.add.version"
       maxlength="25"
       show-word-limit
       @input="inputVersion"
       placeholder="版本号格式为x.x.x"
      ></el-input>
    </el-form-item>
-   <el-form-item label="版本号"  v-if="formData.pubType !== 'new'" prop="versionSelect">
-     <el-select placeholder="请选择" v-model="formData.versionSelect"  @blur="handleSelect()" @change="selectChange">
+   <el-form-item label="版本号"  v-if="formData.pubType !== 'new'" prop="edit.version">
+     <el-select placeholder="请选择" v-model="formData.edit.version"  @blur="handleSelect()" @change="selectChange">
        <el-option
          v-for="item in formData.releaseList"
          :key="item.version +' '+ item.distributeType"
@@ -31,29 +31,38 @@
        </el-option>
      </el-select>
    </el-form-item>
-   <el-form-item label="发布类型" v-if="formData.pubType === 'new'" prop="contentType" class="multiline-radio-group">
-     <el-radio-group v-model="formData.contentType">
+   <el-form-item label="发布类型" v-if="formData.pubType === 'new'" prop="add.distributeType" class="multiline-radio-group">
+     <el-radio-group v-model="formData.add.distributeType">
        <el-radio label="H5" border :disabled="exsitedList.indexOf('H5') !== -1">H5</el-radio>
        <el-radio label="浙政钉" border :disabled="exsitedList.indexOf('浙政钉') !== -1">H5(浙政钉)</el-radio>
        <el-radio label="浙里办" border :disabled="exsitedList.indexOf('浙里办') !== -1">H5(浙里办)</el-radio>
        <el-radio label="vue 工程源码" border :disabled="exsitedList.indexOf('vue 工程源码') !== -1">vue 工程源码</el-radio>
      </el-radio-group>
    </el-form-item>
-   <el-form-item label="发布类型" v-else prop="contentType" class="multiline-radio-group">
-     <el-radio-group v-model="formData.contentType">
-       <el-radio label="H5" border :disabled="formData.contentType !=='H5'">H5</el-radio>
-       <el-radio label="浙政钉" border :disabled="formData.contentType !=='浙政钉'">H5(浙政钉)</el-radio>
-       <el-radio label="浙里办" border :disabled="formData.contentType !=='浙里办'">H5(浙里办)</el-radio>
-       <el-radio label="vue 工程源码" border :disabled="formData.contentType !=='vue 工程源码'">vue 工程源码</el-radio>
+   <el-form-item label="发布类型" v-else class="multiline-radio-group">
+     <el-radio-group v-model="formData.edit.distributeType">
+       <el-radio label="H5" border :disabled="formData.edit.distributeType !=='H5'">H5</el-radio>
+       <el-radio label="浙政钉" border :disabled="formData.edit.distributeType !=='浙政钉'">H5(浙政钉)</el-radio>
+       <el-radio label="浙里办" border :disabled="formData.edit.distributeType !=='浙里办'">H5(浙里办)</el-radio>
+       <el-radio label="vue 工程源码" border :disabled="formData.edit.distributeType !=='vue 工程源码'">vue 工程源码</el-radio>
      </el-radio-group>
    </el-form-item>
    <el-form-item label="说明" class="dialog-last">
      <el-input
        type="textarea"
        placeholder="请输入内容"
-       v-model="formData.description"
+       v-model="formData.add.description"
        maxlength="150"
        show-word-limit
+       v-if="formData.pubType === 'new'"
+     />
+     <el-input
+       type="textarea"
+       placeholder="请输入内容"
+       v-model="formData.edit.description"
+       maxlength="150"
+       show-word-limit
+       v-else
      />
    </el-form-item>
  </el-form>
@@ -78,25 +87,31 @@ export default class PublishAppContent extends Vue {
   @Prop() showDialog!: boolean
   selectVersionIndex: any = ''
   formData = {
-    pubType: 'new', // update new
-    version: '',
-    versionSelect: '',
-    contentType: 'H5',
-    description: '',
-    releaseList: []
+    pubType: 'new',
+    releaseList: [],
+    add: {
+      version: '',
+      description: '',
+      distributeType: 'H5'
+    },
+    edit: {
+      version: '',
+      description: '',
+      distributeType: 'H5'
+    }
   }
 
   exsitedList: Array<string> = []
 
   rules = {
-    version: [
+    'add.version': [
       { validator: this.check('appInfo.releaseList', 'version', '版本号', 4), trigger: 'blur', required: true },
       { pattern: /^[0-9]+\.[0-9]+\.[0-9]+$/g, trigger: 'blur', message: '版本号格式为x.x.x' }
     ],
-    versionSelect: [
+    'edit.version': [
       { required: true, trigger: 'blur', message: '版本号不能为空' }
     ],
-    contentType: [
+    'add.distributeType': [
       { required: true, trigger: 'blur', message: '类型不能为空' }
     ]
   }
@@ -104,13 +119,12 @@ export default class PublishAppContent extends Vue {
   publishConfirm () {
     (this.$refs.form as Form).validate(async (valid: any) => {
       if (valid) {
-        const params = new FormData()
-        params.set('appid', this.appInfo.id)
-        params.set('version', this.formData.pubType === 'new' ? this.formData.version : this.formData.versionSelect.split(' ')[0])
-        params.set('optsBy', '中')
-        params.set('distributeType', this.formData.contentType)
-        params.set('desc', this.formData.description)
-        await publishApp(params)
+        if (this.formData.pubType === 'new') {
+          await publishApp(this.getParams(this.formData.add, { appid: this.appInfo.id, createBy: '中' }))
+        } else {
+          const params = { ...this.formData.edit, ...{ version: this.formData.edit.version.split(' ')[0] } }
+          await publishApp(this.getParams(params, { appid: this.appInfo.id, updateBy: '中' }))
+        }
         this.$message({
           message: '发布成功',
           type: 'success',
@@ -130,15 +144,13 @@ export default class PublishAppContent extends Vue {
   }
 
   pubTypeChange () {
-    (this.$refs.form as Form).clearValidate(['versionSelect', 'version'])
-    this.formData.version = ''
-    this.formData.versionSelect = ''
+    (this.$refs.form as Form).clearValidate(['add.version', 'edit.version', 'add.distributeType'])
   }
 
   handleSelect () {
     // 暂时未想到更好的解决办法 nextTick versionSelect 还是空
     setTimeout(() => {
-      (this.$refs.form as Form).validateField('versionSelect', err => {
+      (this.$refs.form as Form).validateField('edit.version', err => {
         console.log(err)
       })
     }, 200)
@@ -148,21 +160,21 @@ export default class PublishAppContent extends Vue {
     // this.formData.description = this.formData.releaseList[this.selectVersionIndex].desc
     const arr = val.split(' ')
     if (arr.length === 2) {
-      this.formData.contentType = arr[1]
+      this.formData.edit.distributeType = arr[1]
     } else {
-      this.formData.contentType = arr.slice(1).join(' ')
+      this.formData.edit.distributeType = arr.slice(1).join(' ')
     }
   }
 
   inputVersion () {
     const list: Array<string> = []
     this.appInfo.releaseList.forEach((item: any) => {
-      if (item.version === this.formData.version) {
+      if (item.version === this.formData.add.version) {
         list.push(item.distributeType)
       }
     })
     this.exsitedList = list
-    if (this.exsitedList.indexOf(this.formData.contentType) !== -1) this.formData.contentType = ''
+    if (this.exsitedList.indexOf(this.formData.add.distributeType) !== -1) this.formData.add.distributeType = ''
   }
 
   get show () {

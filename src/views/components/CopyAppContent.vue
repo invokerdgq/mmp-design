@@ -86,11 +86,7 @@ export default class CopyAppContent extends Vue {
   copyConfirm () {
     (this.$refs.form as Form).validate(async (valid: any) => {
       if (valid) {
-        const formData = new FormData()
-        formData.set('sourceAppid', this.appInfo.id)
-        formData.set('newAppJson', JSON.stringify(this.formData))
-        formData.set('optsBy', '中')
-        await copyApp(formData)
+        await copyApp(this.getParams(this.formData, { createBy: '中', sourceAppId: this.appInfo.id }))
         this.$message({
           message: '复制成功',
           type: 'success',
