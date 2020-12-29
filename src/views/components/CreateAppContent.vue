@@ -41,11 +41,11 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Form } from 'element-ui'
 import { createApp } from '@/api/page/home'
-import { noRepeat } from '@/utils/validator'
-import Params from '@/utils/getParams'
+import { WithCheck, WithParams } from '@/utils/helper'
 
 @Component({})
-@Params
+@WithCheck
+@WithParams()
 export default class CreateAppContent extends Vue {
   @Prop({ default: 'right' }) labelPosition!: string
   @Prop() showDialog!: boolean
@@ -59,15 +59,14 @@ export default class CreateAppContent extends Vue {
 
   rules = {
     title: [
-      { validator: noRepeat(this.list, 'title'), trigger: 'blur', required: true }
+      { validator: this.check('list', 'title', '应用名称'), trigger: 'blur', required: true }
     ]
   }
 
   createConfirm () {
     (this.$refs.form as Form).validate(async (valid: any) => {
       if (valid) {
-        // @ts-ignore
-        await createApp(this.getParams(this.formData, '中'))
+        await createApp(this.getParams(this.formData, { createBy: '中' }))
         this.$message({
           message: '新建成功',
           type: 'success',

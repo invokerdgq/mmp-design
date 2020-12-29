@@ -9,7 +9,7 @@
     @node="nodeChange"
   >
     <div slot="header" class="design-dec">
-      <span class="mmp-gongneng iconfont"></span>
+      <span class="mmp-yypz iconfont"></span>
       <span class="dec">应用配置</span>
     </div>
   </NavLeft>
@@ -22,7 +22,7 @@
           <el-form :model="formData" :rules="rules" ref="form">
             <el-form-item prop="base.url" label-width="140px" label="后台支撑服务地址" v-if="configType === 'base'" key="1">
               <el-input
-                v-model="formData.base.url"
+                v-model="formData.base.backEndUrl"
                 maxlength="500"
                 show-word-limit
               ></el-input>
@@ -102,7 +102,9 @@
 import { Component, Vue } from 'vue-property-decorator'
 import NavLeft from '@/components/NavLeft.vue'
 import { editApp } from '@/api/page/home'
+import { WithParams } from '@/utils/helper'
 
+@WithParams()
 @Component({
   components: {
     NavLeft
@@ -179,8 +181,6 @@ export default class ConfigDesign extends Vue {
   save () {
     (this.$refs.form as any).validate(async (valid: boolean) => {
       if (valid) {
-        const params = new FormData()
-        params.set('optsBy', '中')
         let obj
         switch (this.configType) {
           case 'base':
@@ -195,8 +195,7 @@ export default class ConfigDesign extends Vue {
           default :
             obj = { ZheJiangGov: this.formData.ban }
         }
-        params.set('appJson', JSON.stringify(obj))
-        await editApp(params)
+        await editApp(this.getParams(obj, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '保存成功'

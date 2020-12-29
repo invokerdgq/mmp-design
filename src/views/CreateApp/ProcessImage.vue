@@ -1,6 +1,6 @@
 <template>
   <div class="process strench">
-    <div>
+    <div class="img-container">
       <el-image src="" fit="none"/>
     </div>
   </div>
@@ -14,4 +14,8 @@ export default class ProcessImage extends Vue {}
 </script>
 
 <style scoped lang="scss">
+.img-container{
+  width: 100%;
+  margin: auto 0;
+}
 </style>

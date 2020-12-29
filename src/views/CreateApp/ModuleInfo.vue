@@ -91,8 +91,11 @@
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from 'vue-property-decorator'
 import * as api from '@/api/page/featureDesign'
+import { WithParams, WithCheck } from '@/utils/helper'
 
 @Component({})
+@WithParams()
+@WithCheck
 export default class ModuleInfo extends Vue {
   type = 'moduleInfo'
   reCreate = true
@@ -118,28 +121,16 @@ export default class ModuleInfo extends Vue {
 
   rules = {
     'create.title': [
-      { validator: this.check, trigger: 'blur', required: true }
+      { validator: this.check('allName', 'title', '模块名称'), trigger: 'blur', required: true }
     ],
     'edit.title': [
-      { validator: this.check, trigger: 'blur', required: true }
+      { validator: this.check('allName', 'title', '模块名称'), trigger: 'blur', required: true }
     ]
   }
 
   @Watch('info.id')
   handleNodeChange () {
     this.resetPage()
-  }
-
-  check (rule: any, value: '', callback: any) {
-    if (value === '') {
-      callback(new Error('模块名称不能为空'))
-    }
-    this.allName.forEach((item: any) => {
-      if (item.title === value && value !== this.info.title) {
-        callback(new Error('模块名称已存在'))
-      }
-    })
-    callback()
   }
 
   resetPage () {
@@ -159,11 +150,8 @@ export default class ModuleInfo extends Vue {
   async addModule () {
     (this.$refs.addForm as any).validate(async (valid: boolean) => {
       if (valid) {
-        const params = new FormData()
-        params.set('moduleJson', JSON.stringify(this.formData.create))
-        params.set('optsBy', '中')
         this.isLoading = true
-        await api.addModule(params)
+        await api.addModule(this.getParams(this.formData.create, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '添加模块成功'
@@ -177,11 +165,8 @@ export default class ModuleInfo extends Vue {
   editModule () {
     (this.$refs.form as any).validate(async (valid: boolean) => {
       if (valid) {
-        const params = new FormData()
-        params.set('moduleJson', JSON.stringify(this.formData.edit))
-        params.set('optsBy', '中')
         this.isLoading = true
-        await api.editModule(params)
+        await api.editModule(this.getParams(this.formData.edit, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '修改模块成功'

@@ -87,6 +87,7 @@ import CopyAppContent from '@/views/components/CopyAppContent.vue'
 import PublishAppContent from '@/views/components/PublishAppContent.vue'
 import DownLoadAppContent from '@/views/components/DownLoadAppContent.vue'
 import Shade from '@/components/Shade.vue'
+// @ts-ignore
 import preImg from '../assets/images/defaultImg.png'
 
 @Component({
@@ -116,6 +117,9 @@ export default class Home extends Vue {
 
   created () {
     this.getList()
+    if (this.$route.query.token) {
+      localStorage.setItem('authToken', this.$route.query.token as string)
+    }
   }
 
   copy () {

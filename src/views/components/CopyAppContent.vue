@@ -51,12 +51,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
-import { noRepeat } from '@/utils/validator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Form } from 'element-ui'
 import { copyApp } from '@/api/page/home'
+import { WithParams, WithCheck } from '@/utils/helper'
 
 @Component({})
+@WithParams()
+@WithCheck
 export default class CopyAppContent extends Vue {
   @Prop({ default: 'right' }) labelPosition!: string
   @Prop() appInfo!: any
@@ -71,7 +73,7 @@ export default class CopyAppContent extends Vue {
 
   rules = {
     title: [
-      { validator: noRepeat(this.list, 'title'), trigger: 'blur', required: true }
+      { validator: this.check('list', 'title', '应用名称'), trigger: 'blur', required: true }
     ]
   }
 
@@ -88,7 +90,7 @@ export default class CopyAppContent extends Vue {
         formData.set('sourceAppid', this.appInfo.id)
         formData.set('newAppJson', JSON.stringify(this.formData))
         formData.set('optsBy', '中')
-        const res = await copyApp(formData)
+        await copyApp(formData)
         this.$message({
           message: '复制成功',
           type: 'success',

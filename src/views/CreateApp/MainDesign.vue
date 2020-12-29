@@ -160,8 +160,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import * as api from '@/api/page/mainDesign'
+import { WithCheck, WithParams } from '@/utils/helper'
 
 @Component({})
+@WithParams()
+@WithCheck
 export default class MainDesign extends Vue {
   type = ''
   show = false
@@ -193,7 +196,7 @@ export default class MainDesign extends Vue {
 
   rules = {
     title: [
-      { validator: this.check, trigger: 'blur', required: true }
+      { validator: this.check('pageList', 'title', '首页名称'), trigger: 'blur', required: true }
     ]
   }
 
@@ -203,18 +206,6 @@ export default class MainDesign extends Vue {
         textAlign: 'center'
       }
     }
-  }
-
-  check (rule: any, value: string, callback: (arg0?: any) => void) {
-    if (value === '') {
-      callback(new Error('首页名称不能为空'))
-    }
-    this.pageList.forEach((item: any) => {
-      if (item.title === value) {
-        callback(new Error('首页名称已存在'))
-      }
-    })
-    callback()
   }
 
   search () {
@@ -256,10 +247,7 @@ export default class MainDesign extends Vue {
   addConfirm () {
     (this.$refs.add as any).validate(async (valid: any) => {
       if (valid) {
-        const params = new FormData()
-        params.set('firstPageJson', JSON.stringify(this.formData.addPageData))
-        params.set('optsBy', '中')
-        await api.addHomePage(params)
+        await api.addHomePage(this.getParams(this.formData.addPageData, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '新增页面成功'
@@ -273,10 +261,7 @@ export default class MainDesign extends Vue {
   editConfirm () {
     (this.$refs.edit as any).validate(async (valid: any) => {
       if (valid) {
-        const params = new FormData()
-        params.set('firstPageJson', JSON.stringify(this.formData.editPageData))
-        params.set('optsBy', '中')
-        await api.editHomePage(params)
+        await api.editHomePage(this.getParams(this.formData.editPageData, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '修改页面成功'

@@ -121,8 +121,11 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import * as api from '@/api/page/featureDesign'
+import { WithParams, WithCheck } from '@/utils/helper'
 
 @Component({})
+@WithParams()
+@WithCheck
 export default class PageInfo extends Vue {
   type = 'pageInfo'
   isLoading = false
@@ -148,7 +151,7 @@ export default class PageInfo extends Vue {
 
   rules = {
     title: [
-      { validator: this.check, trigger: 'blur', required: true }
+      { validator: this.check('allName', 'title', '页面名称'), trigger: 'blur', required: true }
     ],
     url: [
       { required: true, trigger: 'blur', message: '页面地址不能为空' }
@@ -182,7 +185,7 @@ export default class PageInfo extends Vue {
     this.resetPage()
   }
 
-  check (rule: any, value: string, callback: any) {
+  check1 (rule: any, value: string, callback: any) {
     if (value === '') {
       callback(new Error('页面名称不能为空'))
     }
@@ -195,11 +198,8 @@ export default class PageInfo extends Vue {
   addPage () {
     (this.$refs.addForm as any).validate(async (valid: boolean) => {
       if (valid) {
-        const params = new FormData()
-        params.set('pageJson', JSON.stringify(this.formData.create))
-        params.set('optsBy', '中')
         this.isLoading = true
-        await api.addPage(params)
+        await api.addPage(this.getParams(this.formData.create, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '添加页面成功'
@@ -213,11 +213,8 @@ export default class PageInfo extends Vue {
   editPage () {
     (this.$refs.editForm as any).validate(async (valid: boolean) => {
       if (valid) {
-        const params = new FormData()
-        params.set('pageJson', JSON.stringify(this.formData.edit))
-        params.set('optsBy', '中')
         this.isLoading = true
-        await api.editPage(params)
+        await api.editPage(this.getParams(this.formData.edit, { createBy: '中' }))
         this.$message({
           type: 'success',
           message: '修改页面成功'

@@ -51,13 +51,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { noRepeat } from '@/utils/validator'
 import { Form } from 'element-ui'
 import { editApp } from '@/api/page/home'
-import Params from '@/utils/getParams'
+import { WithParams, WithCheck } from '@/utils/helper'
 
 @Component({})
-@Params
+@WithParams()
+@WithCheck
 export default class EditAppContent extends Vue {
   @Prop({ default: 'right' }) labelPosition!: string
   @Prop() appInfo!: any
@@ -72,7 +72,7 @@ export default class EditAppContent extends Vue {
 
   rules = {
     title: [
-      { validator: noRepeat(this.list, 'title'), trigger: 'blur', required: true }
+      { validator: this.check('list', 'title', '应用名称'), trigger: 'blur', required: true }
     ]
   }
 
@@ -86,8 +86,7 @@ export default class EditAppContent extends Vue {
       if (valid) {
         this.formData.id = this.appInfo.id
         this.formData.coverimage = this.appInfo.coverimage
-        // @ts-ignore
-        await editApp(this.getParams(this.formData, '中'))
+        await editApp(this.getParams(this.formData, { createBy: '中' }))
         this.$message({
           message: '编辑成功',
           type: 'success',

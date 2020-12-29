@@ -1,6 +1,13 @@
 import router from './index'
 
 router.beforeEach((to, from, next) => {
-  // 拦截-----
+  if (to.path !== '/' && to.path !== '/home') {
+    if (localStorage.getItem('authToken')) {
+      next()
+      return
+    }
+    next({ name: 'Home' })
+    return
+  }
   next()
 })

@@ -31,7 +31,7 @@
        </el-option>
      </el-select>
    </el-form-item>
-   <el-form-item label="发布类型" v-if="formData.pubType === 'new'" prop="contentType" class="pub-radio-group">
+   <el-form-item label="发布类型" v-if="formData.pubType === 'new'" prop="contentType" class="multiline-radio-group">
      <el-radio-group v-model="formData.contentType">
        <el-radio label="H5" border :disabled="exsitedList.indexOf('H5') !== -1">H5</el-radio>
        <el-radio label="浙政钉" border :disabled="exsitedList.indexOf('浙政钉') !== -1">H5(浙政钉)</el-radio>
@@ -66,11 +66,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { noRepeat, versionCheck } from '@/utils/validator'
 import { Form } from 'element-ui'
 import { publishApp } from '@/api/page/home'
+import { WithCheck } from '@/utils/helper'
 
 @Component({})
+@WithCheck
 export default class PublishAppContent extends Vue {
   @Prop({ default: 'right' }) labelPosition!: string
   @Prop() appInfo!: any
@@ -89,8 +90,8 @@ export default class PublishAppContent extends Vue {
 
   rules = {
     version: [
-      { validator: noRepeat(this.appInfo.releaseList, 'version', '版本号', 'distributeType'), trigger: 'blur', required: true },
-      { validator: versionCheck, trigger: 'blur' }
+      { validator: this.check('appInfo.releaseList', 'version', '版本号', 4), trigger: 'blur', required: true },
+      { pattern: /^[0-9]+\.[0-9]+\.[0-9]+$/g, trigger: 'blur', message: '版本号格式为x.x.x' }
     ],
     versionSelect: [
       { required: true, trigger: 'blur', message: '版本号不能为空' }

@@ -49,6 +49,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import LeanTab from '../../components/LeanTab.vue'
 import Shade from '@/components/Shade.vue'
 import IconContainer from './IconContain.vue'
+// @ts-ignore
 import bgImg from '../../assets/images/defaultImg.png'
 
 @Component({
@@ -103,10 +104,6 @@ export default class AppListItem extends Vue {
       color: 'bg3'
     }
   ]
-
-  showDialog = false
-  confirmText = '确认'
-  dialogTitle = ''
 
   handleFeature (item: any) {
     this.$emit('handleFeature', item)
