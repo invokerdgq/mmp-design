@@ -9,11 +9,11 @@
    </el-header>
    <el-main>
      <div v-if="type === 'moduleInfo'" class="module-info-content">
-       <el-form :model="formData" ref="form" v-if="edit" key="1" :rules="rules">
-         <el-form-item label="模块名称" label-width="80px" prop="edit.title">
+       <el-form :model="formData" ref="form" :rules="rules">
+         <el-form-item label="模块名称" label-width="80px" prop="edit.title" v-show="edit">
            <el-input v-model="formData.edit.title" :disabled="info.parentModuleId === '0'"></el-input>
          </el-form-item>
-         <el-row :gutter="20" v-if="parentName">
+         <el-row :gutter="20" v-show="parentName && edit">
            <el-col :span="12">
              <el-form-item label-width="80px" label="父模块">
                <el-input :value="parentName" disabled></el-input>
@@ -30,7 +30,7 @@
              </el-form-item>
            </el-col>
          </el-row>
-         <el-form-item label="说明" label-width="80px">
+         <el-form-item label="说明" label-width="80px" v-show="edit">
            <el-input
              type="textarea"
              placeholder="请输入内容"
@@ -39,15 +39,13 @@
              show-word-limit
            ></el-input>
          </el-form-item>
-         <el-form-item>
+         <el-form-item v-show="edit">
            <div class="save-container"><el-button type="primary" @click="editModule" :disabled="isLoading">保存</el-button></div>
          </el-form-item>
-       </el-form>
-       <el-form :model="formData" ref="addForm" :rules="rules" v-else key="2">
-         <el-form-item prop="create.title" label="模块名称" label-width="80px">
+         <el-form-item prop="create.title" label="模块名称" label-width="80px" v-if="!edit">
            <el-input v-model="formData.create.title"></el-input>
          </el-form-item>
-         <el-row :gutter="20">
+         <el-row :gutter="20" v-show="!edit">
            <el-col :span="12">
              <el-form-item label-width="80px" label="父模块">
                <el-input :value="info.title" disabled></el-input>
@@ -64,7 +62,7 @@
              </el-form-item>
            </el-col>
          </el-row>
-         <el-form-item label="说明" label-width="80px">
+         <el-form-item label="说明" label-width="80px" v-show="!edit">
            <el-input
              type="textarea"
              placeholder="请输入内容"
@@ -73,7 +71,7 @@
              show-word-limit
            ></el-input>
          </el-form-item>
-         <el-form-item>
+         <el-form-item v-show="!edit">
            <div class="save-container"><el-button type="primary" @click="addModule" :disabled="isLoading">保存</el-button></div>
          </el-form-item>
        </el-form>
@@ -130,7 +128,8 @@ export default class ModuleInfo extends Vue {
 
   @Watch('info.id')
   handleNodeChange () {
-    this.resetPage()
+    this.resetPage();
+    (this.$refs.form as any).clearValidate()
   }
 
   resetPage () {
@@ -148,7 +147,7 @@ export default class ModuleInfo extends Vue {
   }
 
   async addModule () {
-    (this.$refs.addForm as any).validate(async (valid: boolean) => {
+    (this.$refs.form as any).validate(async (valid: boolean) => {
       if (valid) {
         this.isLoading = true
         await api.addModule(this.getParams(this.formData.create, { createBy: '中' }))
@@ -166,7 +165,7 @@ export default class ModuleInfo extends Vue {
     (this.$refs.form as any).validate(async (valid: boolean) => {
       if (valid) {
         this.isLoading = true
-        await api.editModule(this.getParams(this.formData.edit, { createBy: '中' }))
+        await api.editModule(this.getParams(this.formData.edit, { updateBy: '中' }))
         this.$message({
           type: 'success',
           message: '修改模块成功'

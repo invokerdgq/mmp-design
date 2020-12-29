@@ -8,11 +8,11 @@ function WithParams (option?: any) {
 
 function WithCheck (Component: any) {
   Component.prototype.check = function (data: string, key: string, message: string, num: number) {
-    let result: any
-    data.split('.').forEach((item: string) => {
-      result = this[item]
-    })
-    return function (rule: any, value: string, callback: (arg0?: any) => void) {
+    return (rule: any, value: string, callback: (arg0?: any) => void) => {
+      let result: any
+      data.split('.').forEach((item: string) => {
+        result = this[item]
+      })
       if (value === '') {
         callback(new Error(`${message}不能为空`))
       }

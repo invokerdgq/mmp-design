@@ -157,7 +157,6 @@ export default class PublishAppContent extends Vue {
   }
 
   selectChange (val: any) {
-    // this.formData.description = this.formData.releaseList[this.selectVersionIndex].desc
     const arr = val.split(' ')
     if (arr.length === 2) {
       this.formData.edit.distributeType = arr[1]
