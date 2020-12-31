@@ -68,8 +68,8 @@
    <!--分页-->
    <el-pagination
      class="table-pagination"
-     @size-change="handleSizeChange"
-     @current-change="handleCurrentChange"
+     @size-change="setPageSize"
+     @current-change="toPage"
      :current-page="pageNum"
      :page-sizes="[10, 20, 50]"
      :page-size="pageSize"
@@ -160,19 +160,16 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import * as api from '@/api/page/mainDesign'
-import { WithCheck, WithParams } from '@/utils/helper'
+import { WithCheck, WithParams, WithPage } from '@/utils/helper'
 
 @Component({})
+@WithPage()
 @WithParams()
 @WithCheck
 export default class MainDesign extends Vue {
   type = ''
   show = false
   selectionList!: Array<any>
-  total = 0
-  pageSize = 10
-  pageNum = 1
-  pageList = []
   formData = {
     search: {
       title: '',
@@ -209,35 +206,31 @@ export default class MainDesign extends Vue {
   }
 
   search () {
-    this.resetPage()
+    this.toPage(1)
+    this.selectionList = []
   }
 
   reset () {
     this.formData.search.title = ''
     this.formData.search.description = ''
-    this.pageNum = 1
-    this.resetPage()
+    this.resetPageOption()
   }
 
-  resetPage () {
-    this.getPageList()
-    this.selectionList = []
-  }
-
-  async getPageList () {
+  async getList (num = this.pageNum, size = this.pageSize) {
+    // 不能提前修改 pageNum pageSize 会影响序号 在请求未完成时 item序号已发生变化
     const res = await api.getHomePage({
       appid: this.$route.params.id,
       title: this.formData.search.title,
       description: this.formData.search.description,
-      pageNum: this.pageNum,
-      pageSize: this.pageSize
+      pageNum: num,
+      pageSize: size
     })
     this.pageList = res.data
     this.total = (res as any).cursor.total
   }
 
   created () {
-    this.getPageList()
+    this.toPage(1)
   }
 
   handleSelectionChange (selection: any) {
@@ -253,7 +246,7 @@ export default class MainDesign extends Vue {
           message: '新增页面成功'
         })
         this.show = false
-        this.resetPage()
+        this.toPage(1)
       }
     })
   }
@@ -267,7 +260,7 @@ export default class MainDesign extends Vue {
           message: '修改页面成功'
         })
         this.show = false
-        this.resetPage()
+        this.toPage(1)
       }
     })
   }
@@ -295,7 +288,7 @@ export default class MainDesign extends Vue {
             type: 'success',
             message: '删除成功!'
           })
-          this.resetPage()
+          this.getList()
         })
       }).catch(() => {
         this.$message({
@@ -322,7 +315,7 @@ export default class MainDesign extends Vue {
         type: 'success',
         message: '删除成功!'
       })
-      this.resetPage()
+      this.getList()
     }).catch(() => {
       this.$message({
         type: 'info',
@@ -360,17 +353,6 @@ export default class MainDesign extends Vue {
       type: 'success',
       message: '关闭启用成功'
     })
-  }
-
-  handleSizeChange (size: number) {
-    this.pageSize = size
-    this.pageNum = 1
-    this.resetPage()
-  }
-
-  handleCurrentChange (pageNum: number) {
-    this.pageNum = pageNum
-    this.resetPage()
   }
 }
 </script>
