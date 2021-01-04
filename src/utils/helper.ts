@@ -9,7 +9,7 @@ function WithParams (option?: any) {
 function WithCheck (Component: any) {
   Component.prototype.check = function (data: string, key: string, message: string, num: number) {
     return (rule: any, value: string, callback: (arg0?: any) => void) => {
-      let result: any
+      let result: any = ''
       data.split('.').forEach((item: string) => {
         result = this[item]
       })

@@ -1,5 +1,5 @@
 <template>
- <div :class="`${bgColor} icon-container`">
+ <div :class="`bg-${bgColor} icon-container`">
    <div :class="`${iconClass} iconfont`" ></div>
  </div>
 </template>
@@ -15,25 +15,25 @@ export default class IconContainer extends Vue {
 </script>
 
 <style scoped lang="scss">
- .bg0{
+ .bg-cyan{
    background: $color-iconBg-cyan;
    &:hover{
      background: $color-iconBg-hover-cyan;
    }
  }
- .bg1{
+ .bg-blue{
    background: $color-iconBg-blue;
    &:hover{
      background: $color-iconBg-hover-blue;
    }
  }
- .bg2{
+ .bg-orange{
    background: $color-iconBg-orange;
    &:hover{
      background: $color-iconBg-hover-orange;
    }
  }
- .bg3{
+ .bg-red{
    background: $color-iconBg-red;
    &:hover{
      background: $color-iconBg-hover-red;

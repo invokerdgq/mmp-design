@@ -15,7 +15,7 @@ export default class ProcessImage extends Vue {}
 
 <style scoped lang="scss">
 .img-container{
-  width: 100%;
+  width: 90%;
   margin: auto 0;
 }
 </style>

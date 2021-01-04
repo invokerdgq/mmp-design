@@ -12,9 +12,8 @@ import * as filter from './filter/filter'
 Vue.use(VueClipboard)
 Vue.use(Element)
 Vue.config.productionTip = false
-Object.keys(filter).forEach(item => {
-  // @ts-ignore
-  Vue.filter(item, filter[item])
+Object.keys(filter).forEach((item: string) => {
+  Vue.filter(item, (filter as allIndex)[item])
 })
 
 new Vue({

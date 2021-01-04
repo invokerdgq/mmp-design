@@ -122,20 +122,20 @@ $gap-default: 15px;
 $gap-small: 12px;
 $gap-smaller: 10px;
 $gap-smallest: 8px;
-$gap-second: 10px;
-$gap-small: 8px;
+$gap-mini: 4px;
+
 
 /*padding - margin*/
-$padding-large: 20px;
-$padding-default: 15px;
-$padding-default-small: 12px;
-$padding-second: 10px;
-$padding-small: 8px;
-$margin-large: 20px;
-$margin-default: 15px;
-$margin-default-small: 12px;
-$margin-second: 10px;
-$margin-small: 8px;
+$padding-large: $gap-larger;
+$padding-default: $gap-default;
+$padding-default-small: $gap-small;
+$padding-second: $gap-smaller;
+$padding-small: $gap-smallest;
+$margin-large: $gap-larger;
+$margin-default: $gap-default;
+$margin-default-small: $gap-small;
+$margin-second: $gap-smaller;
+$margin-small: $gap-smallest;
 
 /*nav-side-color*/
 $color-nav-left: #10202F;

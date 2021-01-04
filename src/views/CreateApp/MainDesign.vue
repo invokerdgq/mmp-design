@@ -333,7 +333,9 @@ export default class MainDesign extends Vue {
     this.formData.editPageData.description = item.description
   }
 
-  designPageItem (item: any) {}
+  designPageItem (item: any) {
+    console.log(item)
+  }
 
   async switchChange (item: any, status: boolean) {
     if (status) {

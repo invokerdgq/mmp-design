@@ -87,7 +87,6 @@ import CopyAppContent from '@/views/components/CopyAppContent.vue'
 import PublishAppContent from '@/views/components/PublishAppContent.vue'
 import DownLoadAppContent from '@/views/components/DownLoadAppContent.vue'
 import Shade from '@/components/Shade.vue'
-// @ts-ignore
 import preImg from '../assets/images/defaultImg.png'
 
 @Component({
@@ -129,8 +128,7 @@ export default class Home extends Vue {
         message: '复制成功',
         showClose: true
       })
-    }, err => {
-      console.log(err)
+    }, () => {
       this.$message({
         type: 'error',
         message: '复制失败,稍后重试',

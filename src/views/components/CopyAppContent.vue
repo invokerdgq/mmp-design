@@ -95,7 +95,6 @@ export default class CopyAppContent extends Vue {
         this.show = false
         this.$emit('update')
       } else {
-        console.log('error submit!!')
         return false
       }
     })

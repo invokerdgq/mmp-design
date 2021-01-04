@@ -49,7 +49,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import LeanTab from '../../components/LeanTab.vue'
 import Shade from '@/components/Shade.vue'
 import IconContainer from './IconContain.vue'
-// @ts-ignore
 import bgImg from '../../assets/images/defaultImg.png'
 
 @Component({
@@ -71,37 +70,37 @@ export default class AppListItem extends Vue {
     {
       label: '编辑',
       icon: 'mmp-edit',
-      color: 'bg0'
+      color: 'cyan'
     },
     {
       label: '定制',
       icon: 'mmp-huiyuan',
-      color: 'bg0'
+      color: 'cyan'
     },
     {
       label: '复制',
       icon: 'mmp-fuzhi',
-      color: 'bg1'
+      color: 'blue'
     },
     {
       label: '预览',
       icon: 'mmp-viewShow',
-      color: 'bg1'
+      color: 'blue'
     },
     {
       label: '发布',
       icon: 'mmp-release',
-      color: 'bg2'
+      color: 'orange'
     },
     {
       label: '下载',
       icon: 'mmp-yunxiazai',
-      color: 'bg2'
+      color: 'orange'
     },
     {
       label: '删除',
       icon: 'mmp-trash',
-      color: 'bg3'
+      color: 'red'
     }
   ]
 

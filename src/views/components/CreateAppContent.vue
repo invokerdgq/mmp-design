@@ -75,7 +75,6 @@ export default class CreateAppContent extends Vue {
         this.show = false
         this.$emit('update')
       } else {
-        console.log('error submit!!')
         return false
       }
     })
